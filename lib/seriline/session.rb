@@ -1,6 +1,10 @@
 module Seriline
   class Session
-    attr_reader :username, :api_key, :session_key, :successful_login, :valid_to
+    attr_reader :username,
+                :api_key,
+                :session_key,
+                :successful_login,
+                :valid_to
 
     def initialize(username = Seriline::USERNAME, api_key = Seriline::API_KEY)
       @username = username
@@ -35,7 +39,7 @@ module Seriline
       Seriline::Request.get(
         Seriline::Endpoint.logout_path,
         { sessionKey: @session_key }
-      ).tap { @session_key = nil }
+      ).tap(&destroy_session_info)
     end
 
     private
@@ -46,6 +50,14 @@ module Seriline
         return unless @successful_login
         @session_key = response["SessionKey"]
         @valid_to = Time.new(response["ValidTo"])
+      }
+    end
+
+    def destroy_session_info
+      lambda { |response|
+        @session_key = nil
+        @session_key = nil
+        @valid_to = nil
       }
     end
   end

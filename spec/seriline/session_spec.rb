@@ -6,6 +6,7 @@ RSpec.describe Seriline::Session do
   let(:session_key) { "my_session_key"}
   let(:username) { Seriline::USERNAME }
   let(:api_key) { Seriline::API_KEY }
+  let(:session) { Seriline::Session.new }
 
   let(:login_success_response) do
     {
@@ -60,14 +61,12 @@ RSpec.describe Seriline::Session do
     end
 
     it "must default to seriline authentication details" do
-      session = Seriline::Session.new
       session.login
 
       expect(WebMock).to have_requested(:get, login_uri)
     end
 
     it "must store the expiration date" do
-      session = Seriline::Session.new
       session.login
 
       expect(session.valid_to).to_not eq nil
@@ -77,7 +76,6 @@ RSpec.describe Seriline::Session do
 
   describe "#logout" do
     it "must end a seriline session" do
-      session = Seriline::Session.new
       session.login
       session.logout
 
@@ -85,7 +83,6 @@ RSpec.describe Seriline::Session do
     end
 
     it "must discard the session key" do
-      session = Seriline::Session.new
       session.login
       session.logout
 
@@ -94,8 +91,6 @@ RSpec.describe Seriline::Session do
   end
 
   describe "#active?" do
-    let(:session) { Seriline::Session.new }
-
     it "must become true after login" do
       session.login
 
@@ -109,7 +104,7 @@ RSpec.describe Seriline::Session do
       expect(session).to be_active
     end
 
-    it "must become false after a unsuccessful login" do
+    it "must become false after an unsuccessful login" do
       stub_request(:get, login_uri)
         .to_return(body: login_failure_response)
 
