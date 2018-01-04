@@ -1,20 +1,20 @@
 # Seriline
 
-# Usage
-## Authentication
+# Configuration
 For any Seriline request you must first login.
 A session will be active for 60 minutes and during that session you can
 use the other parts of the API.
 
-To start a session `username` and `api_key` is required
-which you can receive by contacting Seriline. To use the key in any
-Seriline request you can store it by doing the following:
-
+You can store details with a configuration block:
 ```ruby
-Seriline::USERNAME = "my_user"
-Seriline::API_KEY = "my_api_key"
+# configure Seriline details
+Seriline.configure do |config|
+  config.username = username
+  config.api_key = api_key
+end
 ```
-
+# Usage
+## Authentication
 To connect to the API either do it with block syntax:
 ```ruby
 Seriline::Client.connect do |client|
@@ -31,6 +31,10 @@ client.logout
 ```
 
 Both are the same. Using block syntax you won't have to worry about logging in and out.
+If you have not configured seriline with username and api key you can provide that to any
+of those methods.
+
+### Uses
 
 - [X] `GET api/Authentication/Login?username={username}&apiKey={apiKey}`
 - [X] `GET api/Authentication/Logout?sessionKey={sessionKey}`

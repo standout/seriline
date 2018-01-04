@@ -4,13 +4,13 @@ module Seriline
                 :api_key,
                 :session
 
-    def initialize(username = Seriline::USERNAME, api_key = Seriline::API_KEY)
+    def initialize(username = Seriline.config.username, api_key = Seriline.config.api_key)
       @username = username
       @api_key = api_key
       @session = nil
     end
 
-    def self.connect(username = Seriline::USERNAME, api_key = Seriline::API_KEY)
+    def self.connect(username = Seriline.config.username, api_key = Seriline.config.api_key)
       Seriline::Client.new(username, api_key).tap do |client|
         client.login
         if client.active?

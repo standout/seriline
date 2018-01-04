@@ -5,8 +5,8 @@ require "spec_helper"
 
 RSpec.describe Seriline::Client do
   let(:session_key) { "my_session_key"}
-  let(:username) { Seriline::USERNAME }
-  let(:api_key) { Seriline::API_KEY }
+  let(:username) { "my_name" }
+  let(:api_key) { "my_key" }
   let(:client) { Seriline::Client.new }
 
   let(:login_success_response) do
@@ -44,7 +44,17 @@ RSpec.describe Seriline::Client do
 
   let(:stub_logout_request) { stub_request :get, logout_uri }
 
-  before { stub_login_request; stub_logout_request }
+  before do
+    # configure Seriline details
+    Seriline.configure do |config|
+      config.username = username
+      config.api_key = api_key
+    end
+
+    # stub requests
+    stub_login_request
+    stub_logout_request
+  end
 
   describe "#login" do
     it "must start a seriline session" do
