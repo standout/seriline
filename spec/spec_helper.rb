@@ -1,4 +1,5 @@
 require "bundler/setup"
+require 'webmock/rspec'
 require "seriline"
 
 RSpec.configure do |config|
