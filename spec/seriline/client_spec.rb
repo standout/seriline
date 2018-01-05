@@ -87,6 +87,15 @@ RSpec.describe Seriline::Client do
       expect(session.error_message).to_not be_nil
       expect(session.valid_to).to_not be_nil
     end
+
+    it "must not make a login request if already logged in" do
+      client.login
+      allow(client.session).to receive(:active?).and_return(true)
+
+      client.login
+
+      expect(WebMock).to have_requested(:get, login_uri).once
+    end
   end
 
   describe "#logout" do
@@ -102,6 +111,15 @@ RSpec.describe Seriline::Client do
       client.logout
 
       expect(client.session).to_not be_active
+    end
+
+    it "must not create a logout request if already inactive" do
+      client.login
+      allow(client.session).to receive(:active?).and_return(false)
+
+      client.logout
+
+      expect(WebMock).to_not have_requested(:get, logout_uri)
     end
   end
 
