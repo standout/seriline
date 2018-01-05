@@ -40,7 +40,12 @@ of those methods.
 - [X] `GET api/Authentication/Logout?sessionKey={sessionKey}`
 
 ## Configproducts
-- [ ] `GET api/ConfigProduct/GetAvailable?sessionKey={sessionKey}`
+A config product is a custom product which you can order.
+
+You can list your available config products with: `ConfigProduct.get_available(session)`
+This returns an array of `ConfigProduct` instances.
+
+- [X] `GET api/ConfigProduct/GetAvailable?sessionKey={sessionKey}`
 - [ ] `GET api/ConfigProduct/GetConfigProductInfo?sessionKey={sessionKey}&productId={productId}	`
 - [ ] `POST api/ConfigProduct/SingleOrder`
 - [ ] `POST api/ConfigProduct/BatchOrder`

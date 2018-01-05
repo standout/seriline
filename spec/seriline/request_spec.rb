@@ -57,7 +57,7 @@ RSpec.describe Seriline::Request do
       expect(result).to eq body
     end
 
-    it "returns an empty hash if no response body given" do
+    it "must return an empty hash if no response body given" do
       stub_request(:get, base_uri)
 
       result = Seriline::Request.new(base_uri).execute

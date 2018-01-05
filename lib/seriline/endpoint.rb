@@ -6,7 +6,8 @@ module Seriline
 
     {
       login: "/Authentication/Login",
-      logout: "/Authentication/Logout"
+      logout: "/Authentication/Logout",
+      get_available_config_products: "/ConfigProduct/GetAvailable"
     }.each do |action, path|
       define_singleton_method("#{action}_path") do |query = {}|
         URI(BASE_URI + path).tap do |uri|
