@@ -7,7 +7,7 @@ module Seriline
     def initialize(username = Seriline.config.username, api_key = Seriline.config.api_key)
       @username = username
       @api_key = api_key
-      @session = Seriline::Session.new({})
+      @session = Seriline::SessionData.new({})
     end
 
     def self.with_connection(username = Seriline.config.username, api_key = Seriline.config.api_key)
@@ -21,6 +21,7 @@ module Seriline
     end
 
     def login
+      return if @session.active?
       Seriline::Request.get(
         Seriline::Endpoint.login_path,
         { username: @username, apiKey: @api_key }
@@ -28,6 +29,7 @@ module Seriline
     end
 
     def logout
+      return unless @session.active?
       Seriline::Request.get(
         Seriline::Endpoint.logout_path,
         { sessionKey: @session.session_key }
@@ -38,7 +40,7 @@ module Seriline
 
     def update_session_info
       lambda { |response|
-        @session = Seriline::Session.new(response)
+        @session = Seriline::SessionData.new(response)
       }
     end
   end

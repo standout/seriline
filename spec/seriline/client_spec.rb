@@ -1,5 +1,5 @@
 require "seriline/endpoint"
-require "seriline/session"
+require "seriline/session_data"
 require "seriline/client"
 require "spec_helper"
 

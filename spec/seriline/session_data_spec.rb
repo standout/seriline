@@ -1,8 +1,8 @@
 require "spec_helper"
-require "seriline/session"
+require "seriline/session_data"
 require "seriline/endpoint"
 
-RSpec.describe Seriline::Session do
+RSpec.describe Seriline::SessionData do
   describe "#active?" do
     let(:login_success_response) do
       {
@@ -13,7 +13,7 @@ RSpec.describe Seriline::Session do
       }
     end
 
-    let(:session) { Seriline::Session.new(login_success_response) }
+    let(:session) { Seriline::SessionData.new(login_success_response) }
 
     it "must be able to be active" do
       expect(session).to be_active
