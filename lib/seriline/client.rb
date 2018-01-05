@@ -10,7 +10,7 @@ module Seriline
       @session = nil
     end
 
-    def self.connect(username = Seriline.config.username, api_key = Seriline.config.api_key)
+    def self.with_connection(username = Seriline.config.username, api_key = Seriline.config.api_key)
       Seriline::Client.new(username, api_key).tap do |client|
         client.login
         if client.active?

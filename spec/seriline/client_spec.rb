@@ -142,30 +142,30 @@ RSpec.describe Seriline::Client do
     end
   end
 
-  describe ".connect" do
+  describe ".with_connection" do
     it "must start a seriline session" do
       expect_any_instance_of(Seriline::Client).to receive(:login).and_return(login_success_response)
       allow_any_instance_of(Seriline::Client).to receive(:logout)
 
-      Seriline::Client.connect(username, api_key)
+      Seriline::Client.with_connection(username, api_key)
     end
 
     it "must end a seriline session when done" do
       expect_any_instance_of(Seriline::Client).to receive(:logout)
 
-      Seriline::Client.connect
+      Seriline::Client.with_connection
     end
 
     it "must return a session" do
-      expect(Seriline::Client.connect).to be_an_instance_of(Seriline::Client)
+      expect(Seriline::Client.with_connection).to be_an_instance_of(Seriline::Client)
     end
 
     it "must yield the given block" do
-      expect { |b| Seriline::Client.connect(&b) }.to yield_control
+      expect { |b| Seriline::Client.with_connection(&b) }.to yield_control
     end
 
     it "must yield the session instance to the block" do
-      Seriline::Client.connect do |session|
+      Seriline::Client.with_connection do |session|
         expect(client).to_not be_nil
         expect(client).to be_an_instance_of(Seriline::Client)
       end
@@ -175,7 +175,7 @@ RSpec.describe Seriline::Client do
       stub_request(:get, login_uri)
         .to_return(body: login_failure_response)
 
-      expect { |b| Seriline::Client.connect(&b) }.to_not yield_control
+      expect { |b| Seriline::Client.with_connection(&b) }.to_not yield_control
     end
   end
 end

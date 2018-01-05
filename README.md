@@ -17,7 +17,7 @@ end
 ## Authentication
 To connect to the API either do it with block syntax:
 ```ruby
-Seriline::Client.connect do |client|
+Seriline::Client.with_connection do |client|
   # <- Your awesome code goes here
 end
 ```
