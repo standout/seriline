@@ -97,48 +97,11 @@ RSpec.describe Seriline::Client do
       expect(WebMock).to have_requested(:get, logout_uri)
     end
 
-    it "must discard the session" do
+    it "must make the session inactive" do
       client.login
       client.logout
 
-      expect(client.session).to eq nil
-    end
-  end
-
-  describe "#active?" do
-    it "must become true after login" do
-      client.login
-
-      expect(client).to be_active
-    end
-
-    it "must be false when session key is not set" do
-      client.login
-      client.instance_variable_set(:@session_key, "session_key")
-
-      expect(client).to be_active
-    end
-
-    it "must become false after an unsuccessful login" do
-      stub_request(:get, login_uri)
-        .to_return(body: login_failure_response)
-
-      client.login
-
-      expect(client).to_not be_active
-    end
-
-    it "must become false after logout" do
-      client.login
-      client.logout
-
-      expect(client).to_not be_active
-    end
-
-    it "must be false when session key is nil" do
-      client.instance_variable_set(:@session_key, nil)
-
-      expect(client).to_not be_active
+      expect(client.session).to_not be_active
     end
   end
 
