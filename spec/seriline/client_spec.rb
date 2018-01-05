@@ -119,6 +119,13 @@ RSpec.describe Seriline::Client do
       Seriline::Client.with_connection
     end
 
+    it "must end a seriline session upon crash" do
+      expect_any_instance_of(Seriline::Client).to receive(:logout)
+      expect_any_instance_of(Seriline::Client).to receive(:login).and_raise
+
+      Seriline::Client.with_connection
+    end
+
     it "must return a session" do
       expect(Seriline::Client.with_connection).to be_an_instance_of(Seriline::Client)
     end
