@@ -22,7 +22,7 @@ module Seriline
       Net::HTTP.start(@uri.host, @uri.port) do |http|
         response_body = http.request(request_object(body)).body
         return {} if response_body.empty?
-        return JSON.parse(response_body)
+        return JSON.parse(response_body, {quirks_mode: true})
       end
     end
 

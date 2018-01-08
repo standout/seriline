@@ -49,6 +49,14 @@ RSpec.describe Seriline::Request do
   end
 
   describe "#execute" do
+    it "must be able to return a single value" do
+      body = true
+      stub_request(:get, base_uri).to_return(body: body.to_json)
+
+      result = Seriline::Request.new(base_uri).execute
+      expect(result).to eq body
+    end
+
     it "must return the result as a hash" do
       body = { "message" => "hello world" }
       stub_request(:get, base_uri).to_return(body: body.to_json)
