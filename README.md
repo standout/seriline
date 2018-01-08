@@ -45,11 +45,20 @@ of those methods.
 ## Configproducts
 A config product is a custom product which you can order.
 
-You can list your available config products with: `ConfigProduct.get_available(session)`
+You can list your available config products like so:
+```ruby
+Seriline::Client.with_connection do |client|
+  client.get_available_config_products
+end
+```
 This returns an array of `ConfigProduct` instances.
 
 When you have your product id you can proceed to do a single order.
-`ConfigProduct.new(product_id: my_product_id).order`
+```ruby
+Seriline::Client.with_connection do |client|
+  client.order_config_product(my_product_id, data)
+end
+```
 This will return a `ConfigProductSingleOrderData` object which amongst other
 things contains `order_id`. This key can be used for looking up more information
 about this specific order and should thus be kept.
@@ -72,6 +81,10 @@ about this specific order and should thus be kept.
 
 ### Orders
 You can get information about an order by user `Seriline::Order`.
-Example: `Seriline::Order.get_order_info(session, order_id)`
+```ruby
+Seriline::Client.with_connection do |client|
+  client.get_order_info(order_id))
+end
+```
 
 - [X] `GET api/Order/GetOrderInfo?sessionKey={sessionKey}&orderId={orderId}`

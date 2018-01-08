@@ -39,6 +39,19 @@ module Seriline
       ).tap(&destroy_session_info)
     end
 
+    def get_available_config_products
+      ConfigProduct.get_available(@session)
+    end
+
+    def order_config_product(product_id, data)
+      ConfigProduct.new(product_id: product_id)
+        .order(@session, data)
+    end
+
+    def get_order_info(order_id)
+      Order.get_order_info(session, order_id)
+    end
+
     private
 
     def store_session_info
