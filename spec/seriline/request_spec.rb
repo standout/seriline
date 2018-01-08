@@ -1,3 +1,4 @@
+require "seriline/errors"
 require "seriline/request"
 require "spec_helper"
 require "uri"
@@ -70,6 +71,23 @@ RSpec.describe Seriline::Request do
 
       result = Seriline::Request.new(base_uri).execute
       expect(result).to eq({})
+    end
+
+    it "must raise an error if request failed" do
+      stub_request(:get, base_uri).to_return(status: 400)
+
+      expect { Seriline::Request.new(base_uri).execute }.to raise_error Seriline::RequestFailedError
+    end
+
+    it "must include a useful error message when request failed" do
+      stub_request(:get, base_uri).to_return(status: 400)
+
+      expected_message = %(
+        Net::HTTP failed to execute request with the following status:
+        Status: 400
+      )
+
+      expect { Seriline::Request.new(base_uri).execute }.to raise_error expected_message
     end
   end
 end

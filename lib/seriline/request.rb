@@ -20,13 +20,24 @@ module Seriline
 
     def execute(body = {})
       Net::HTTP.start(@uri.host, @uri.port) do |http|
-        response_body = http.request(request_object(body)).body
-        return {} if response_body.empty?
-        return JSON.parse(response_body, {quirks_mode: true})
+        response = http.request(request_object(body))
+        evaluate_response(response)
+        return parse_response(response)
       end
     end
 
     private
+
+    def evaluate_response(response)
+      response.value
+    rescue
+      raise Seriline::RequestFailedError.new(response)
+    end
+
+    def parse_response(response)
+      return {} if response.body.empty?
+      JSON.parse(response.body, {quirks_mode: true})
+    end
 
     def request_object(body)
       @request_object ||= case @method
