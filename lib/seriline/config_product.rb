@@ -1,3 +1,4 @@
+require "seriline/config_product_single_order_data"
 require "seriline/request"
 
 module Seriline
@@ -6,8 +7,17 @@ module Seriline
 
     def self.get_available(session)
       result = Request.get(Seriline::Endpoint.get_available_config_products_path,
-                           { session_key: session.session_key })
+                           { sessionKey: session.session_key })
       result["Products"].map {|product| Seriline::ConfigProduct.new(product)}
+    end
+
+    def order(session, data = {})
+      result = Request.post(Seriline::Endpoint.config_product_single_order_path,
+                            {
+                              sessionKey: session.session_key,
+                              ExternalId: @product_id
+                            }.merge(data))
+      Seriline::ConfigProductSingleOrderData.new(result)
     end
   end
 end

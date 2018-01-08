@@ -1,5 +1,8 @@
 # Seriline
 
+# Frågor
+`configProduct/getavailable`: Är external id samma sak som product id?
+
 # Configuration
 For any Seriline request you must first login.
 A session will be active for 60 minutes and during that session you can
@@ -45,9 +48,15 @@ A config product is a custom product which you can order.
 You can list your available config products with: `ConfigProduct.get_available(session)`
 This returns an array of `ConfigProduct` instances.
 
+When you have your product id you can proceed to do a single order.
+`ConfigProduct.new(product_id: my_product_id).order`
+This will return a `ConfigProductSingleOrderData` object which amongst other
+things contains `order_id`. This key can be used for looking up more information
+about this specific order and should thus be kept.
+
 - [X] `GET api/ConfigProduct/GetAvailable?sessionKey={sessionKey}`
 - [ ] `GET api/ConfigProduct/GetConfigProductInfo?sessionKey={sessionKey}&productId={productId}	`
-- [ ] `POST api/ConfigProduct/SingleOrder`
+- [X] `POST api/ConfigProduct/SingleOrder`
 - [ ] `POST api/ConfigProduct/BatchOrder`
 - [ ] `GET api/ConfigProduct/GetProductionData?sessionKey={sessionKey}&configProductId={configProductId}`
 
