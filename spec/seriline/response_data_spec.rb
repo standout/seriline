@@ -2,31 +2,29 @@ require "seriline/response_data"
 require "spec_helper"
 
 RSpec.describe Seriline::ResponseData do
-  # describe ".define" do
-  #   it "must define a reader for each given key" do
-  #     keys = %i[a b c]
+  describe "#success?" do
+    let(:klass) do
+      Class.new(Seriline::ResponseData) do
+        attr_reader :success
+      end
+    end
 
-  #     klass = Seriline::ResponseData.define(*keys)
-  #     instance = klass.new
+    it "must have a default implementation" do
+      expect(klass.new).to respond_to :success?
+    end
 
-  #     keys.each do |key|
-  #       expect(instance).to respond_to key
-  #     end
-  #   end
+    it "must be true if the success attribute is true" do
+      instance = klass.new(success: true)
 
-  #   it "must be able to add behaviour through block" do
-  #     klass = Seriline::ResponseData.define do |klass|
-  #       klass.define_method("foo") do
-  #         puts "bar"
-  #       end
-  #     end
-  #     puts klass.instance_methods.sort
+      expect(instance.success?).to eq true
+    end
 
-  #     instance = klass.new
+    it "must be false if the success attribute is false" do
+      instance = klass.new(success: false)
 
-  #     expect(instance).to respond_to :foo
-  #   end
-  # end
+      expect(instance.success?).to eq false
+    end
+  end
 
   describe ".initialize" do
     it "must set values defined by attribute readers" do

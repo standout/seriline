@@ -28,6 +28,10 @@ module Seriline
       end
     end
 
+    def success?
+      success
+    end
+
     private
 
     def snake_case(string)

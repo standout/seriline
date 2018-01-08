@@ -17,6 +17,10 @@ Seriline.configure do |config|
 end
 ```
 # Usage
+All actions execute requests to the seriline API. This means something
+could go wrong on the way. All returned data however; is returned as an
+object with the `success?` method. If a request fails you can use that flag
+along with `error_message` to troubleshoot eventual client problems.
 ## Authentication
 To connect to the API either do it with block syntax:
 ```ruby
@@ -36,8 +40,6 @@ client.logout
 Both are the same. Using block syntax you won't have to worry about logging in and out.
 If you have not configured seriline with username and api key you can provide that to any
 of those methods.
-
-### Uses
 
 - [X] `GET api/Authentication/Login?username={username}&apiKey={apiKey}`
 - [X] `GET api/Authentication/Logout?sessionKey={sessionKey}`
