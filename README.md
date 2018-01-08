@@ -70,4 +70,7 @@ about this specific order and should thus be kept.
 - [ ] `GET api/Accessories/GetAvailable?sessionKey={sessionKey}`
 
 ### Orders
-- [ ] `GET api/Order/GetOrderInfo?sessionKey={sessionKey}&orderId={orderId}`
+You can get information about an order by user `Seriline::Order`.
+Example: `Seriline::Order.get_order_info(session, order_id)`
+
+- [X] `GET api/Order/GetOrderInfo?sessionKey={sessionKey}&orderId={orderId}`

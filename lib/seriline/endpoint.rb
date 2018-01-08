@@ -8,7 +8,8 @@ module Seriline
       login: "/Authentication/Login",
       logout: "/Authentication/Logout",
       get_available_config_products: "/ConfigProduct/GetAvailable",
-      config_product_single_order: "/ConfigProduct/SingleOrder"
+      config_product_single_order: "/ConfigProduct/SingleOrder",
+      get_order_info: "/Order/GetOrderInfo"
     }.each do |action, path|
       define_singleton_method("#{action}_path") do |query = {}|
         URI(BASE_URI + path).tap do |uri|
