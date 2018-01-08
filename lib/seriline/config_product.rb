@@ -2,7 +2,9 @@ require "seriline/config_product_single_order_data"
 require "seriline/request"
 
 module Seriline
-  class ConfigProduct < Seriline::ResponseData
+  # Använd något sånt här för response
+  # class ConfigProductResponse
+  class ConfigProduct < Seriline::Model
     attr_reader :product_id, :name, :short_description, :is_batch_product
 
     def self.get_available(session)

@@ -12,15 +12,28 @@ module Seriline
 
     def self.with_connection(username = Seriline.config.username, api_key = Seriline.config.api_key)
       Seriline::Client.new(username, api_key).tap do |client|
+        # FOO
+        with_client(client) { yield }
+        # Remove under this
         begin
           client.login
+          # Behöver vi block given? Man skall kanske inte kunna köra denna utan block.
           yield(client) if block_given? &&
             client.session.active?
-        rescue
+        rescue => e
+          raise e
         ensure
           client.logout
         end
       end
+    end
+
+    # TODO: Maby do dthos
+    def self.with_client(client)
+      client.login
+      yield(client) if block_given? && client.session.active?
+    ensure
+      client.logout
     end
 
     def login

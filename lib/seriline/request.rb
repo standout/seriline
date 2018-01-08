@@ -30,6 +30,7 @@ module Seriline
 
     def evaluate_response(response)
       response.value
+    # TODO: remove the e var
     rescue => e
       raise Seriline::RequestFailedError.new(response)
     end
