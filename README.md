@@ -1,8 +1,5 @@
 # Seriline
 
-# Frågor
-`configProduct/getavailable`: Är external id samma sak som product id?
-
 # Configuration
 For any Seriline request you must first login.
 A session will be active for 60 minutes and during that session you can

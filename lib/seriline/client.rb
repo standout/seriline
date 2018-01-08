@@ -28,7 +28,7 @@ module Seriline
       Seriline::Request.get(
         Seriline::Endpoint.login_path,
         { username: @username, apiKey: @api_key }
-      ).tap(&update_session_info)
+      ).tap(&store_session_info)
     end
 
     def logout
@@ -36,15 +36,21 @@ module Seriline
       Seriline::Request.get(
         Seriline::Endpoint.logout_path,
         { sessionKey: @session.session_key }
-      ).tap(&update_session_info)
+      ).tap(&destroy_session_info)
     end
 
     private
 
-    def update_session_info
+    def store_session_info
       lambda { |response|
-        @session = Seriline::SessionData.new(response)
+        @session = Seriline::SessionData.new(
+          response.merge(logged_in: true)
+        )
       }
+    end
+
+    def destroy_session_info
+      -> (_response) { @session = Seriline::SessionData.new({}) }
     end
   end
 end
