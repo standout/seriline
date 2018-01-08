@@ -1,5 +1,6 @@
 # Seriline
-
+Seriline provides an API for ordering their products. This gem provides a simple method
+for connecting and using the API.
 # Configuration
 For any Seriline request you must first login.
 A session will be active for 60 minutes and during that session you can
