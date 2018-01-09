@@ -134,18 +134,21 @@ RSpec.describe Seriline::Client do
     it "must end a seriline session when done" do
       expect_any_instance_of(Seriline::Client).to receive(:logout)
 
-      Seriline::Client.with_connection
+      Seriline::Client.with_connection {}
     end
 
     it "must end a seriline session upon crash" do
+      allow_any_instance_of(Seriline::Client).to receive(:login).and_raise
       expect_any_instance_of(Seriline::Client).to receive(:logout)
-      expect_any_instance_of(Seriline::Client).to receive(:login).and_raise
 
-      Seriline::Client.with_connection
+      begin
+        Seriline::Client.with_connection {}
+      rescue
+      end
     end
 
     it "must return a session" do
-      expect(Seriline::Client.with_connection).to be_an_instance_of(Seriline::Client)
+      expect(Seriline::Client.with_connection {}).to be_an_instance_of(Seriline::Client)
     end
 
     it "must yield the given block" do

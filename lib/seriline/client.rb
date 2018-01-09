@@ -12,15 +12,15 @@ module Seriline
 
     def self.with_connection(username = Seriline.config.username, api_key = Seriline.config.api_key)
       Seriline::Client.new(username, api_key).tap do |client|
-        begin
-          client.login
-          yield(client) if block_given? &&
-            client.session.active?
-        rescue
-        ensure
-          client.logout
-        end
+        self.client_connection(client) { yield }
       end
+    end
+
+    def self.client_connection(client)
+      client.login
+      yield(client) if client.session.active?
+    ensure
+      client.logout
     end
 
     def login
