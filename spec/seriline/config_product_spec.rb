@@ -1,13 +1,20 @@
-require "seriline/config_product_single_order_data"
+require "seriline/responses/config_product_single_order_response"
+require "seriline/responses/login_response"
 require "seriline/config_product"
-require "seriline/session_data"
+require "seriline/session"
 require "spec_helper"
 
 RSpec.describe Seriline::ConfigProduct do
   let(:session_key) { "session_key" }
-  let(:session) { Seriline::SessionData.new({valid_to: Time.now + 60**2, session_key: session_key}) }
+  let(:session) do
+    Seriline::Session.new(
+      Seriline::LoginResponse.new(valid_to: Time.now + 60**2, session_key: session_key)
+    )
+  end
 
-  describe "#order" do
+  let(:product_id) { 1 }
+
+  describe ".order" do
     let(:response) do
       {
         "Success": true,
@@ -18,18 +25,19 @@ RSpec.describe Seriline::ConfigProduct do
     end
 
     let(:order_uri) { Seriline::Endpoint.config_product_single_order_path }
-    let(:config_product) { Seriline::ConfigProduct.new({product_id: 1}) }
 
     before do
       stub_request(:post, order_uri)
     end
 
     it "must use the provided product id" do
-      expect(config_product.product_id).to eq 1
+      Seriline::ConfigProduct.order(session, product_id)
+      expect(WebMock).to have_requested(:post, order_uri).
+        with {|request| JSON.parse(request.body)["ExternalId"] == product_id }
     end
 
     it "must use the provided session" do
-      config_product.order(session)
+      Seriline::ConfigProduct.order(session, product_id)
       expect(WebMock).to have_requested(:post, order_uri).
         with {|request| JSON.parse(request.body)["sessionKey"] == session_key }
     end
@@ -37,24 +45,24 @@ RSpec.describe Seriline::ConfigProduct do
     # I'm not entirely sure about this. I have to ask Seriline whether this is the actual
     # key to use.
     it "must set the external id to the provided id" do
-      config_product.order(session)
+      Seriline::ConfigProduct.order(session, product_id)
 
       expect(WebMock).to have_requested(:post, order_uri).
-        with {|request| JSON.parse(request.body)["ExternalId"] == config_product.product_id }
+        with {|request| JSON.parse(request.body)["ExternalId"] == product_id }
     end
 
     it "must use the provided data" do
       address = "Gatsatan 4"
-      config_product.order(session, { DeliveryAdress: address })
+      Seriline::ConfigProduct.order(session, product_id, { DeliveryAdress: address })
 
       expect(WebMock).to have_requested(:post, order_uri).
         with {|request| JSON.parse(request.body)["DeliveryAdress"] == address }
     end
 
     it "must return a config product single order response" do
-      result = config_product.order(session)
+      result = Seriline::ConfigProduct.order(session, product_id)
 
-      expect(result).to be_a_kind_of(Seriline::ConfigProductSingleOrderData)
+      expect(result).to be_a_kind_of(Seriline::ConfigProductSingleOrderResponse)
     end
   end
 
@@ -115,11 +123,8 @@ RSpec.describe Seriline::ConfigProduct do
       expect(WebMock).to have_requested(:get, available_uri)
     end
 
-    it "must return an array of config products" do
-      expect(subject).to be_a_kind_of(Array)
-      subject.each do |product|
-        expect(product).to be_a_kind_of Seriline::ConfigProduct
-      end
+    it "must return available config product response" do
+      expect(subject).to be_a_kind_of(Seriline::AvailableConfigProductsResponse)
     end
   end
 end

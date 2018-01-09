@@ -1,5 +1,7 @@
 module Seriline
-  class RequestFailedError < StandardError
+  class Error < StandardError; end
+
+  class RequestFailedError < Error
     def initialize(net_http_error)
       super build_message(net_http_error)
     end

@@ -1,5 +1,5 @@
 require "seriline/endpoint"
-require "seriline/session_data"
+require "seriline/session"
 require "seriline/client"
 require "spec_helper"
 
@@ -21,7 +21,7 @@ RSpec.describe Seriline::Client do
   let(:login_failure_response) do
     {
       "Success": false,
-      "SessionKey": "is_a_session_key_returned?",
+      "SessionKey": "",
       "ErrorMessage": "",
       "ValidTo": Time.now + 60 * 60
     }.to_json
@@ -82,10 +82,10 @@ RSpec.describe Seriline::Client do
 
       session = client.session
       expect(session).to_not be_nil
-      expect(session.success).to_not be_nil
-      expect(session.session_key).to_not be_nil
-      expect(session.error_message).to_not be_nil
-      expect(session.valid_to).to_not be_nil
+      expect(session.login_response.success).to_not be_nil
+      expect(session.login_response.session_key).to_not be_nil
+      expect(session.login_response.error_message).to_not be_nil
+      expect(session.login_response.valid_to).to_not be_nil
     end
 
     it "must not make a login request if already logged in" do

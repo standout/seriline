@@ -1,23 +1,22 @@
-require "seriline/config_product_single_order_data"
+require "seriline/responses/config_product_single_order_response"
+require "seriline/responses/available_config_products_response"
 require "seriline/request"
 
 module Seriline
-  class ConfigProduct < Seriline::ResponseData
-    attr_reader :product_id, :name, :short_description, :is_batch_product
-
+  class ConfigProduct
     def self.get_available(session)
       result = Request.get(Seriline::Endpoint.get_available_config_products_path,
                            { sessionKey: session.session_key })
-      result["Products"].map {|product| Seriline::ConfigProduct.new(product)}
+      Seriline::AvailableConfigProductsResponse.new(result)
     end
 
-    def order(session, data = {})
+    def self.order(session, product_id, data = {})
       result = Request.post(Seriline::Endpoint.config_product_single_order_path,
                             {
                               sessionKey: session.session_key,
-                              ExternalId: @product_id
+                              ExternalId: product_id
                             }.merge(data))
-      Seriline::ConfigProductSingleOrderData.new(result)
+      Seriline::ConfigProductSingleOrderResponse.new(result)
     end
   end
 end

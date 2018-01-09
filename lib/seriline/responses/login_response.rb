@@ -1,17 +1,12 @@
 require "seriline/response_data"
-require "time"
 
 module Seriline
-  class SessionData < Seriline::ResponseData
+  class LoginResponse < Seriline::ResponseData
     attr_reader :success, :session_key, :error_message, :valid_to
 
-    def initialize(attributes = {})
+    def initialize(attributes)
       super(attributes)
       parse_valid_to
-    end
-
-    def active?
-      success && valid_to > Time.now
     end
 
     private

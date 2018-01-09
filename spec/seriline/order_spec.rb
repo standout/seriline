@@ -1,10 +1,16 @@
-require "seriline/order_info_data"
+require "seriline/responses/order_info_response"
+require "seriline/responses/login_response"
 require "seriline/order"
 require "spec_helper"
 
 RSpec.describe Seriline::Order do
   describe ".get_order_info" do
-    let(:session) { Seriline::SessionData.new({valid_to: Time.now + 60**2, session_key: session_key}) }
+    let(:session) do
+      Seriline::Session.new(
+        Seriline::LoginResponse.new(valid_to: Time.now + 60**2, session_key: session_key)
+      )
+    end
+
     let(:uri) { Seriline::Endpoint.get_order_info_path(sessionKey: session_key, orderId: order_id) }
     let(:session_key) { "my_session" }
     let(:order_id) { 1}
@@ -32,7 +38,7 @@ RSpec.describe Seriline::Order do
     end
 
     it "must return a order info response" do
-      expect(subject).to be_a_kind_of Seriline::OrderInfoData
+      expect(subject).to be_a_kind_of Seriline::OrderInfoResponse
     end
   end
 end

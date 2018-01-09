@@ -1,3 +1,6 @@
+require "seriline/responses/login_response"
+require "seriline/session"
+
 module Seriline
   class Client
     attr_reader :username,
@@ -7,7 +10,7 @@ module Seriline
     def initialize(username = Seriline.config.username, api_key = Seriline.config.api_key)
       @username = username
       @api_key = api_key
-      @session = Seriline::SessionData.new({})
+      @session = Seriline::Session.new
     end
 
     def self.with_connection(username = Seriline.config.username, api_key = Seriline.config.api_key)
@@ -44,8 +47,7 @@ module Seriline
     end
 
     def order_config_product(product_id, data)
-      ConfigProduct.new(product_id: product_id)
-        .order(@session, data)
+      ConfigProduct.order(@session, product_id, data)
     end
 
     def get_order_info(order_id)
@@ -56,14 +58,12 @@ module Seriline
 
     def store_session_info
       lambda { |response|
-        @session = Seriline::SessionData.new(
-          response.merge(logged_in: true)
-        )
+        @session = Seriline::Session.new Seriline::LoginResponse.new(response)
       }
     end
 
     def destroy_session_info
-      -> (_response) { @session = Seriline::SessionData.new({}) }
+      -> (_response) { @session = Seriline::Session.new }
     end
   end
 end

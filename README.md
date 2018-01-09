@@ -51,7 +51,7 @@ Seriline::Client.with_connection do |client|
   client.get_available_config_products
 end
 ```
-This returns an array of `ConfigProduct` instances.
+This returns a `AvailableConfigProductsResponse`. From that you can access the products with `AvailableConfigProductsResponse#products.`
 
 When you have your product id you can proceed to do a single order.
 ```ruby
@@ -59,7 +59,7 @@ Seriline::Client.with_connection do |client|
   client.order_config_product(my_product_id, data)
 end
 ```
-This will return a `ConfigProductSingleOrderData` object which amongst other
+This will return a `ConfigProductSingleOrderResponse` object which amongst other
 things contains `order_id`. This key can be used for looking up more information
 about this specific order and should thus be kept.
 
@@ -83,7 +83,7 @@ about this specific order and should thus be kept.
 You can get information about an order by user `Seriline::Order`.
 ```ruby
 Seriline::Client.with_connection do |client|
-  client.get_order_info(order_id))
+  client.get_order_info(order_id)
 end
 ```
 
