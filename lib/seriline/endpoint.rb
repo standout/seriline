@@ -2,7 +2,7 @@ require "uri"
 
 module Seriline
   class Endpoint
-    BASE_URI  = "http://www.example.com/api"
+    BASE_URI  = "https://api.webconnect.cloud/v2/api"
 
     {
       login: "/Authentication/Login",
