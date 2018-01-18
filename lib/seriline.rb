@@ -1,5 +1,11 @@
 require "seriline/version"
 require "seriline/request"
+require "seriline/session"
+require "seriline/order"
+require "seriline/errors"
+require "seriline/endpoint"
+require "seriline/config_product"
+require "seriline/client"
 
 module Seriline
   class << self
