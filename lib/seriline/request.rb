@@ -1,4 +1,6 @@
 require "net/http"
+require "net/https"
+require "json"
 
 module Seriline
   class Request
@@ -19,14 +21,20 @@ module Seriline
     end
 
     def execute(body = {})
-      Net::HTTP.start(@uri.host, @uri.port) do |http|
-        response = http.request(request_object(body))
-        evaluate_response(response)
-        return parse_response(response)
-      end
+      response = http.request(request_object(body))
+      evaluate_response(response)
+      return parse_response(response)
     end
 
     private
+
+    def http
+      @http ||= Net::HTTP.new(@uri.host, @uri.port)
+                         .tap do |http_instance|
+        http_instance.use_ssl = true
+        http_instance.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      end
+    end
 
     def evaluate_response(response)
       response.value

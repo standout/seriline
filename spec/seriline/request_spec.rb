@@ -4,7 +4,7 @@ require "spec_helper"
 require "uri"
 
 RSpec.describe Seriline::Request do
-  let(:base_uri) { "http://www.example.com" }
+  let(:base_uri) { "https://www.example.com" }
 
   describe ".get" do
     it "must make a get request" do
