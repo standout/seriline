@@ -30,25 +30,28 @@ RSpec.describe Seriline::ConfigProduct do
       stub_request(:post, order_uri)
     end
 
-    it "must use the provided product id" do
-      Seriline::ConfigProduct.order(session, product_id)
+    describe "specification" do
+      it "must use the provided product id" do
+        Seriline::ConfigProduct.order(session, product_id)
+        expect(WebMock).to have_requested(:post, order_uri).
+          with {|request| JSON.parse(request.body)["Specification"]["ProductId"] == product_id }
+      end
+    end
+
+    it "must merge the provided data" do
+      Seriline::ConfigProduct.order(session, product_id, {
+        DeliveryAdress: {
+          CompanyName: "Company"
+        }
+      })
       expect(WebMock).to have_requested(:post, order_uri).
-        with {|request| JSON.parse(request.body)["ExternalId"] == product_id }
+          with {|request| JSON.parse(request.body)["DeliveryAdress"]["CompanyName"] == "Company" }
     end
 
     it "must use the provided session" do
       Seriline::ConfigProduct.order(session, product_id)
       expect(WebMock).to have_requested(:post, order_uri).
         with {|request| JSON.parse(request.body)["sessionKey"] == session_key }
-    end
-
-    # I'm not entirely sure about this. I have to ask Seriline whether this is the actual
-    # key to use.
-    it "must set the external id to the provided id" do
-      Seriline::ConfigProduct.order(session, product_id)
-
-      expect(WebMock).to have_requested(:post, order_uri).
-        with {|request| JSON.parse(request.body)["ExternalId"] == product_id }
     end
 
     it "must use the provided data" do

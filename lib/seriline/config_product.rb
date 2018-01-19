@@ -14,7 +14,7 @@ module Seriline
       result = Request.post(Seriline::Endpoint.config_product_single_order_path,
                             {
                               sessionKey: session.session_key,
-                              ExternalId: product_id
+                              Specification: { ProductId: product_id }
                             }.merge(data))
       Seriline::ConfigProductSingleOrderResponse.new(result)
     end
