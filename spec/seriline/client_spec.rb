@@ -147,8 +147,8 @@ RSpec.describe Seriline::Client do
       end
     end
 
-    it "must return a session" do
-      expect(Seriline::Client.with_connection {}).to be_an_instance_of(Seriline::Client)
+    it "must return result from the yielded block" do
+      expect(Seriline::Client.with_connection { "my_result" }).to eq("my_result")
     end
 
     it "must yield the given block" do

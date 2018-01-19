@@ -14,9 +14,8 @@ module Seriline
     end
 
     def self.with_connection(username = Seriline.config.username, api_key = Seriline.config.api_key)
-      Seriline::Client.new(username, api_key).tap do |client|
-        self.client_connection(client) { yield }
-      end
+      client = Seriline::Client.new(username, api_key)
+      self.client_connection(client) { yield }
     end
 
     def self.client_connection(client)
