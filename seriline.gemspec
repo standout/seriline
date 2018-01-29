@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["w.e.w@live.se"]
 
   spec.summary       = %q{A gem for integrating with the Serline API}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/standout/seriline"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
