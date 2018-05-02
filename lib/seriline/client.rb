@@ -13,9 +13,9 @@ module Seriline
       @session = Seriline::Session.new
     end
 
-    def self.with_connection(username = Seriline.config.username, api_key = Seriline.config.api_key)
+    def self.with_connection(username = Seriline.config.username, api_key = Seriline.config.api_key, &block)
       client = Seriline::Client.new(username, api_key)
-      self.client_connection(client) { yield }
+      self.client_connection(client, &block)
     end
 
     def self.client_connection(client)
